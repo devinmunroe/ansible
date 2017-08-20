@@ -1,0 +1,8 @@
+---
+- name: install docker
+  hosts: master 
+  remote_user: root
+
+  roles: 
+    - common
+    - docker
