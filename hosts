@@ -1,2 +1,2 @@
 [master]
-master ansible_ssh_host=10.0.0.10
+master ansible_ssh_host={{ master_server }}
