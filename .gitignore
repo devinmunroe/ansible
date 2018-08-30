@@ -1,1 +1,6 @@
-main.retry
+*.retry
+host_vars/*
+!host_vars/infra/vm_template
+hosts
+*.yml
+

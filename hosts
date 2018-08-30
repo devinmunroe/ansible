@@ -1,2 +1,0 @@
-[master]
-master ansible_ssh_host=10.0.0.10
