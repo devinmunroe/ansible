@@ -1,0 +1,27 @@
+[hypervisors]
+pve ansible_ssh_host=10.0.0.20 ansible_connection=local
+
+[pxe]
+pxe ansible_ssh_host=10.0.0.30 
+
+[nameservers]
+ns1 ansible_ssh_host=10.0.0.31
+ns2 ansible_ssh_host=10.0.0.32
+
+[databases]
+db01 ansible_ssh_host=10.0.0.34
+
+[monitoring]
+monit01 ansible_ssh_host=10.0.0.33
+
+[kubernetes]
+km01 ansible_ssh_host=10.0.0.50
+kn01 ansible_ssh_host=10.0.0.51
+kn02 ansible_ssh_host=10.0.0.52
+kn03 ansible_ssh_host=10.0.0.53
+
+[estrux]
+devutils ansible_ssh_host=67.212.82.214 ansible_port=2282 ansible_python_interpreter=/usr/bin/python3.5
+
+[devweb]
+devweb01 ansible_ssh_host=10.0.0.39

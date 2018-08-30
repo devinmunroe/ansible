@@ -1,0 +1,8 @@
+---
+- name: 
+  hosts:
+  remote_user: root
+
+  roles: 
+    -
+    -
