@@ -1,0 +1,24 @@
+---
+- name: Add Docker Repo GPG Key
+  apt_key:
+   keyserver: "hkp://p80.pool.sks-keyservers.net:80"
+   id: "58118E89F3A912897C070ADBF76221572C52609D"
+   state: present
+
+- name: Add the Docker Repository
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: docker-engine
+    state: latest
+
+- name: Make the default cgroup driver systemd
+  copy:
+    src: /etc/ansible/roles/docker/templates/daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0600

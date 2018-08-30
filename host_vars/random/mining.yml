@@ -1,0 +1,12 @@
+---
+node: pve
+api_user: root@pam
+api_password: BSm05W4NT3d
+api_host: 10.0.0.20
+vmid: 300
+vmhostname: miner 
+vcpus: 16
+cores: 16
+memory: 8192
+virtual_disk: '{"virtio0":"local1:100,format=qcow2"}'
+virtual_network: '{"net0":"virtio=00:D1:00:00:00:D1,bridge=vmbr0,rate=1000"}'

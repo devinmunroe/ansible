@@ -1,0 +1,5 @@
+---
+- hosts: devutils
+
+  roles:
+   - docker

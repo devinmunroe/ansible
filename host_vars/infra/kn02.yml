@@ -1,0 +1,12 @@
+---
+node: pve
+api_user: root@pam
+api_password: BSm05W4NT3d
+api_host: 10.0.0.20
+vmid: 203
+vmhostname: kn02 
+vcpus: 2
+cores: 2
+memory: 4096
+virtual_disk: '{"virtio0":"local1:100,format=qcow2"}'
+virtual_network: '{"net0":"virtio=00:C1:00:00:00:A3,bridge=vmbr0,rate=1000"}'

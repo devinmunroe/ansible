@@ -1,0 +1,14 @@
+---
+- name: Spinning up a VM 
+  proxmox_kvm:
+    node: "{{ node }}" 
+    api_user: "{{ api_user }}"
+    api_password: "{{ api_password }}"
+    api_host: "{{ api_host }}"
+    vmid: "{{ vmid }}"
+    name: "{{ vmhostname }}"
+    vcpus: "{{ vcpus }}"
+    cores: "{{ cores }}"
+    memory: "{{ memory }}"
+    virtio:  "{{ virtual_disk }}"
+    net: "{{ virtual_network }}"

@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 *.retry
 *.yml
-host_vars/*
+host_vars/
 !host_vars/infra/vm_template
 hosts
 >>>>>>> 8cd908b9e6177605b317622680cffecf0e409983

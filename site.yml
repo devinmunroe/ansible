@@ -1,0 +1,8 @@
+---
+- hosts: pve
+  remote_user: root
+  vars_files:
+   - host_vars/infra/devweb01.yml
+
+  roles: 
+   - spinvm
