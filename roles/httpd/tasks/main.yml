@@ -1,0 +1,12 @@
+---
+ - name: Install HTTPD on Web Servers
+   yum:
+    name: httpd
+    update_cache: yes
+    state: latest
+
+ - name: Start and enable the service
+   systemd:
+    name: httpd
+    state: started
+    enabled: yes

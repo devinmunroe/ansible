@@ -1,0 +1,14 @@
+---
+- name: Create a Test VM
+  proxmox_kvm:
+    node: pve
+    api_user: root@pam
+    api_password: BSm05W4NT3d
+    api_host: 10.0.0.20
+    vmid: 301
+    name: testnode1
+    vcpus: 2
+    cores: 1
+    memory: 2048
+    virtio: '{"virtio0":"local1:100,format=qcow2"}'
+    net: '{"net0":"virtio=14:66:69:D5:AC:34,bridge=vmbr0,rate=100"}'

@@ -1,0 +1,12 @@
+---
+node: {{  master_hypervisor  }}
+api_user: root
+api_password: {{  proxmox_root_password  ]]
+api_host: {{   master_hypervisor_ip  }}
+vmid: 
+vmhostname: 
+vcpus: 
+cores: 
+memory: 
+virtual_disk: '{"virtio0":"local1:100,format=qcow2"}'
+virtual_network: '{"net0":"virtio=,bridge=vmbr0,rate=1000"}'
