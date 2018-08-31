@@ -1,0 +1,5 @@
+apache_vhosts_version: "2.2"
+
+ssl_tls_directory: "/etc/ssl/certs/devweb"
+domain_name: "devweb.cmoke.lan"
+document_root: "/var/html/{{  domain_name  }}/"
