@@ -2,3 +2,8 @@
 - name: Change Hostname
   hostname :
     name : "{{  inventory_hostname }}"
+
+- name: Install epel
+  package: 
+    name: epel-release
+    state: present
