@@ -1,4 +1,4 @@
-apache_vhosts_version: "2.2"
+apache_vhosts_version: "2.4"
 
 ssl_tls_directory: "/etc/ssl/certs/devweb"
 domain_name: 
