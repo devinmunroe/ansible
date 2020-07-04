@@ -1,24 +1,18 @@
 ---
-- name: Add Docker Repo GPG Key
-  apt_key:
-   keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-   id: "58118E89F3A912897C070ADBF76221572C52609D"
-   state: present
-
-- name: Add the Docker Repository
-  apt_repository:
-    repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
-    state: present
-
-- name: Install Docker
-  apt:
-    name: docker-engine
-    state: latest
-
-- name: Make the default cgroup driver systemd
-  copy:
-    src: /etc/ansible/roles/docker/templates/daemon.json
-    dest: /etc/docker/daemon.json
+- name: Add Docker Repository
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: '/etc/yum.repos.d/docker-ce.repo'
     owner: root
     group: root
-    mode: 0600
+    mode: 0644
+
+- name: Install Containerd manually (CentOS8 repositories do not have latest version)
+  yum:
+    name: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+    state: present
+
+- name: Install Docker-CE
+  yum:
+    name: docker-ce
+    state: present
