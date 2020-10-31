@@ -1,2 +1,2 @@
-[invetory_file]
-host ansible_ssh_host= {{  host_ip_address  }}
+[inventory_file]
+host.fullyqual.tld
