@@ -1,0 +1,67 @@
+---
+- name: Create Prometheus User
+  user:
+    name: prometheus
+    shell: /bin/false
+
+
+- name: Download and extract the files
+  unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v2.14.0/prometheus-2.14.0.linux-amd64.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy Binary Files
+  copy:
+    src: "{{  item  }}"
+    dest: /usr/local/bin
+    owner: root
+    group: root
+    mode: '0655'
+    remote_src: true
+  with_items:
+    - /tmp/prometheus-2.14.0.linux-amd64/prometheus
+    - /tmp/prometheus-2.14.0.linux-amd64/promtool
+
+- name: Create prometheus configuration directory
+  file:
+    path: /etc/prometheus
+    state: directory
+    mode: '0755'
+
+- name: Create preometheus data directory
+  file:
+    path: /var/lib/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0775'
+
+- name: Copy Configuration Files
+  copy:
+    src: /etc/ansible/roles/prometheus/files/prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure firewall rules
+  firewalld:
+    port: " {{ item }} "
+    permanent: true
+    state: enabled
+    zone: public
+    immediate: yes
+  with_items:
+      - 9090/tcp
+
+- name: Configure Systemd unit file
+  copy:
+    src: /etc/ansible/roles/prometheus/files/prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+
+- name: Restart Service
+  systemd:
+    name: prometheus      
+    enabled: yes
+    state: restarted

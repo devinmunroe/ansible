@@ -1,0 +1,26 @@
+---
+- name: Add the grafana repo
+  copy:
+    src: /etc/ansible/roles/grafana/files/grafana.repo
+    dest: /etc/yum.repos.d/
+
+- name: Install Grafana
+  dnf:
+    name: grafana
+    state: present
+
+- name: Configure Firewall Rules
+  firewalld:
+     port: "{{  item  }}"
+     permanent: true
+     state: enabled
+     zone: public
+     immediate: yes
+  with_items:
+     - 3000/tcp
+
+- name: Restart Grafana
+  systemd:
+    name: grafana-server
+    state: restarted
+    enabled: yes
