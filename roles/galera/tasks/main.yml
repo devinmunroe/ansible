@@ -1,0 +1,55 @@
+---
+- name: Add MariaDB Repository
+  copy:
+    src: /etc/ansible/roles/galera/files/mariadb.repo
+    dest: /etc/yum.repos.d/mariadb.repo
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install Packages for MariaDB
+  package:
+    name: MariaDB-server, MariaDB-client, galera-4, MariaDB-shared, MariaDB-backup, MariaDB-common
+    state: present
+
+- name: Modify server.cnf
+  ini_file:
+    dest: /etc/my.cnf.d/server.cnf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { section: "galera", option: "wsrep_on", value: "ON" }
+    - { section: "galera", option: "wsrep_provider", value: "/usr/lib64/galera-4/libgalera_smm.so" }
+    - { section: "galera", option: "wsrep_cluster_address", value: "gcomm://192.168.1.120,192.168.1.121" }
+    - { section: "galera", option: "binlog_format", value: "row" }
+    - { section: "galera", option: "default_storage_engine", value: "InnoDB" }
+    - { section: "galera", option: "innodb_autoinc_lock_mode", value: "2" }
+    - { section: "galera", option: "innodb_buffer_pool_size", value: "4294967296" }
+
+- name: Configure firewall rules
+  firewalld:
+    port: " {{ item }} "
+    permanent: true
+    state: enabled
+    zone: public
+    immediate: yes
+  with_items:
+    - 3306/tcp
+    - 3306/udp
+    - 4567/tcp
+    - 4567/udp
+    - 4568/tcp
+    - 4568/udp
+    - 4444/tcp
+    - 4444/udp
+
+- name: Creating Cluster
+  shell: galera_new_cluster
+  when: master is defined
+
+- name: Start Slave Nodes
+  systemd:
+    name: mariadb
+    state: restarted
+  when: master is undefined
