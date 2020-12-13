@@ -3,7 +3,24 @@
   hostname :
     name : "{{  inventory_hostname }}"
 
-- name: Install epel
+- name: Install Common Packages
   package: 
-    name: epel-release
+    name: "{{  item  }}"
     state: present
+  with_items:
+    - epel-release
+    - net-snmp
+    - net-snmp-utils
+
+- name: Configure SNMP
+  copy: 
+    src: /etc/ansible/roles/commons/files/snmp/snmpd.conf
+    dest:  /etc/snmp/snmpd.conf
+
+- name: Enable and reload common services
+  systemd:
+    enabled: yes
+    state: restarted
+    name: "{{  item  }}"
+  with_items:
+    - snmpd

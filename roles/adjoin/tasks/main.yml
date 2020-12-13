@@ -1,0 +1,68 @@
+- name: Install Ansible dnf prerequisites
+    dnf:
+      name: "{{  item  }}"
+      enabled: yes
+      state: present
+    with_items:
+    - python3-pexpect
+    - realmd
+    - oddjob
+    - oddjob-mkhomedir
+    - adcli
+    - samba-common
+    - samba-common-tools
+    - krb5-workstation
+    - authselect-compat
+
+- name: Join CentOS 8 to Active Directory
+  vars_prompt:
+    - name: "domain"
+      prompt: "Active Directory to join"
+      private: no
+    - name: "da_user"
+      prompt: "AD domain admin account"
+      private: no
+    - name: "da_pass"
+      prompt: "AD DA password"
+      private: yes
+
+- name: Validate machine is not currently bound
+  shell: /bin/bash -c "realm list | grep sssd"
+  register: realmd_bound
+  changed_when: false
+  ignore_errors: true
+
+- meta: end_play
+  when: realmd_bound is succeeded
+
+- name: Join system to AD
+  expect:
+    command: /bin/bash -c "/usr/sbin/realm join {{ domain }} -U {{ da_user }}"
+    responses:
+      Password for *: "{{ da_pass }}"
+
+- name: Configure Authselect
+  shell: "{{ item }}"
+  with_items:
+    - authselect select sssd
+    - authselect select sssd with-mkhomedir
+
+- name: Modify sssd.conf
+  ini_file:
+    dest: /etc/sssd/sssd.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { section: "sssd", option: "default_domain_suffix", value: "{{ domain }}" }
+    - { section: "sssd", option: "full_name_format", value: "%1$s" }
+    - { section: "domain/{{ domain }}", option: "access_provider", value: "simple" }
+    - { section: "domain/{{ domain }}", option: "simple_allow_groups", value: "eStruxture MTL Management Pod Administrators" }
+
+- name: Add Sudoers
+  lineinfile:
+    dest: /etc/sudoers.d/windows_admins
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - "%Administrators@cmoke.lan        ALL=(ALL)       ALL"
