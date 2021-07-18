@@ -1,0 +1,6 @@
+---
+- name: Enable and reload common services
+  systemd:
+    enabled: yes
+    state: restarted
+    name: ['snmp','firewalld']"

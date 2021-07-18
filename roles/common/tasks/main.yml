@@ -1,28 +1,5 @@
 ---
-- name: Change Hostname
-  hostname :
-    name : "{{  inventory_hostname }}"
-
-- name: Install Common Packages
-  package: 
-    name: "{{  item  }}"
-    state: present
-  with_items:
-    - epel-release
-    - net-snmp
-    - net-snmp-utils
-    - wget
-
-- name: Configure SNMP
-  copy: 
-    src: /etc/ansible/roles/common/files/snmp/snmpd.conf
-    dest:  /etc/snmp/snmpd.conf
-
-- name: Enable and reload common services
-  systemd:
-    enabled: yes
-    state: restarted
-    name: "{{  item  }}"
-  with_items:
-    - snmpd
-    - firewalld
+- include: configure.yml
+- include: packages.yml
+- include: snmp.yml
+- include: service.yml

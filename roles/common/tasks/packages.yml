@@ -1,0 +1,10 @@
+---
+- name: Install Common Packages
+  package:
+    name: "['epel-release','net-snmp','net-snmp-utils','wget']"
+    state: present
+  with_items:
+    - epel-release
+    - net-snmp
+    - net-snmp-utils
+    - wget
